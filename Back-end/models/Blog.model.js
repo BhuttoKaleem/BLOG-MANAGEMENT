@@ -6,16 +6,14 @@ const blogPostSchema = new mongoose.Schema({
   content: String,
   createdAt: {
     type: Date,
-    default: Date.now, // Sets the default value to the current date and time when the document is created
+    default: Date.now // Default value will be the current date and time when a new document is created
   },
   updatedAt: {
     type: Date,
-    default: null, // By default, no update date until the document is updated
-  },
-  // author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  // Add other necessary fields for the blog post schema
+    default: null // By default, no update date until the document is updated
+  }
 });
 
-const BlogPost = mongoose.model("BlogPost", blogPostSchema);
+const BlogModel = mongoose.model("Blogs", blogPostSchema);
 
-module.exports = BlogPost;
+module.exports = BlogModel;

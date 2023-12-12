@@ -9,7 +9,7 @@ connectDatabase();
 const app = express();
 app.use(cors());
 app.use(express.json());
-// app.use("api/user", userRoutes);
+// app.use("user", userRoutes);
 app.use("/blog-posts",blogRoutes);
 app.use(handleError);
 

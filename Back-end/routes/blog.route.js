@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   getBlogs,
   createBlog,
-} = require("../controllers/Person.Controller");
+} = require("../controllers/Blog.Controller");
 router.get("/", getBlogs);
 router.post("/", createBlog);
 
