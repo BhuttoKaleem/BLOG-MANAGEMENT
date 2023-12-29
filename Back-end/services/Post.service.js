@@ -1,14 +1,29 @@
 const PostModel = require("../models/Post.model");
-// export 1. way 1 :: adding export with functions
-const createPost = async (title, content) => {
-  return await PostModel.create({ title, content});
+
+const createPost = async (title, content, author) => {
+  return await PostModel.create({ title, content, author });
 };
 
-const getPosts = async () => {
-  return await PostModel.find();
+const getAllPosts = async () => {
+  return await PostModel.find().populate('author', 'username email'); // Assuming 'author' is a reference to User model
+};
+
+const getPostById = async (postId) => {
+  return await PostModel.findById(postId).populate('author', 'username email');
+};
+
+const updatePost = async (postId, title, content) => {
+  return await PostModel.findByIdAndUpdate(postId, { title, content }, { new: true });
+};
+
+const deletePost = async (postId) => {
+  return await PostModel.findByIdAndDelete(postId);
 };
 
 module.exports = {
-  getPosts,
-  createPost
+  createPost,
+  getAllPosts,
+  getPostById,
+  updatePost,
+  deletePost,
 };
