@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 async function connectDatabase() {
   await mongoose
-    .connect('mongodb://localhost:27017/Blog_Project')
+    .connect('mongodb+srv://kaleem:kaleem@todoapi.9ihweva.mongodb.net/blogs')
     .then(() => {
       console.log("database is connected");
     })
