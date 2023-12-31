@@ -1,10 +1,10 @@
 const UserModel = require('../models/User.model');
 const bcrypt = require('bcrypt');
 
-const signUp = async (username, email, password) => {
+const signUp = async (username, email, password,role) => {
   // Hash the password before saving it
   const hashedPassword = await bcrypt.hash(password, 10); // You can adjust the saltRounds as needed
-  return await UserModel.create({ username, email, password: hashedPassword });
+  return await UserModel.create({ username, email, password: hashedPassword,role });
 };
 
 const getUserById = async (userId) => {
@@ -43,6 +43,10 @@ const updateEmail = async(userId,email)=>{
   return await UserModel.findByIdAndUpdate(userId,{email},{new:true})
 }
 
+const deleteUser = async(userId)=>{
+  return await UserModel.findByIdAndDelete(userId);
+}
+
 module.exports = {
   signUp,
   getUsers,
@@ -50,5 +54,6 @@ module.exports = {
   getUserByEmail,
   comparePasswords,
   login,
-  updateEmail
+  updateEmail,
+  deleteUser
 };
