@@ -1,8 +1,8 @@
 const CustomError = require("../middleware/CustomError");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const {
-    getUsers,
-    createUser
+    getUsers,login,
+    signUp,updateEmail
   } = require("../services/User.service");
 
 exports.getUsers = async (req, res, next) => {
@@ -12,9 +12,30 @@ exports.getUsers = async (req, res, next) => {
   };
  
 
-  exports.createUser = catchAsyncError(async (req, res, next) => {
+  exports.signUp = catchAsyncError(async (req, res, next) => {
     const { username,email,password  } = req.body;
-    const user = await createUser(username,email,password);
+    const user = await signUp(username,email,password);
     res.json(user);
   });
   
+    
+  exports.login = async (email, password) => {
+    const user = await getUserByEmail(email);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const isPasswordValid = await comparePasswords(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error('Invalid password');
+    }
+    return user;
+  };
+  
+  exports.updateEmail = catchAsyncError(async(req,res,next)=>{
+    const {userId,email} = req.body;
+    const updatedComment = await updateEmail(userId, email);
+    if (!updatedComment) {
+      return next(new CustomError('Post not found', 404));
+    }
+    res.json(updatedComment);
+  });

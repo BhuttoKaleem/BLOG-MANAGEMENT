@@ -1,29 +1,29 @@
-const User = require('../models/User.model');
+const UserModel = require('../models/User.model');
 const bcrypt = require('bcrypt');
 
-const createUser = async (username, email, password) => {
+const signUp = async (username, email, password) => {
   // Hash the password before saving it
   const hashedPassword = await bcrypt.hash(password, 10); // You can adjust the saltRounds as needed
-  return await User.create({ username, email, password: hashedPassword });
+  return await UserModel.create({ username, email, password: hashedPassword });
 };
 
 const getUserById = async (userId) => {
-  return await User.findById(userId).select('-password'); // Exclude password field from the result
+  return await UserModel.findById(userId).select('-password'); // Exclude password field from the result
 };
 
 const getUsers = async()=>{
-  return await User.find();
+  return await UserModel.find();
 }
 
 const getUserByEmail = async (email) => {
-  return await User.findOne({ email });
+  return await UserModel.findOne({ email });
 };
 
 const comparePasswords = async (password, hashedPassword) => {
   return await bcrypt.compare(password, hashedPassword);
 };
 
-const loginUser = async (email, password) => {
+const login = async (email, password) => {
   const user = await getUserByEmail(email);
 
   if (!user) {
@@ -39,11 +39,16 @@ const loginUser = async (email, password) => {
   return user;
 };
 
+const updateEmail = async(userId,email)=>{
+  return await UserModel.findByIdAndUpdate(userId,{email},{new:true})
+}
+
 module.exports = {
-  createUser,
+  signUp,
   getUsers,
   getUserById,
   getUserByEmail,
   comparePasswords,
-  loginUser,
+  login,
+  updateEmail
 };
