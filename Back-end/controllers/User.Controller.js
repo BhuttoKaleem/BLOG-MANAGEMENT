@@ -1,13 +1,13 @@
 const CustomError = require("../middleware/CustomError");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const {
-    getUser,
+    getUsers,
     createUser
   } = require("../services/User.service");
 
-exports.getUser = async (req, res, next) => {
+exports.getUsers = async (req, res, next) => {
     // throw new CustomError("not found", 404);
-    const users = await getUser();
+    const users = await getUsers();
     res.json(users);
   };
  

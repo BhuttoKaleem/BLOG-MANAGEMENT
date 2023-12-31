@@ -4,7 +4,7 @@ const createPost = async (title, content, author) => {
   return await PostModel.create({ title, content, author });
 };
 
-const getAllPosts = async () => {
+const getPosts = async () => {
   return await PostModel.find().populate('author', 'username email'); // Assuming 'author' is a reference to User model
 };
 
@@ -22,7 +22,7 @@ const deletePost = async (postId) => {
 
 module.exports = {
   createPost,
-  getAllPosts,
+  getPosts,
   getPostById,
   updatePost,
   deletePost,

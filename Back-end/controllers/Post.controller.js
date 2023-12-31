@@ -1,15 +1,15 @@
 const {
   createPost,
-  getAllPosts,
+  getPosts,
   getPostById,
   updatePost,
   deletePost,
-} = require('../services/PostService');
+} = require('../services/Post.service');
 const CustomError = require('../middleware/CustomError');
 const catchAsyncError = require('../middleware/catchAsyncError');
 
-exports.getAllPosts = catchAsyncError(async (req, res, next) => {
-  const posts = await getAllPosts();
+exports.getPosts = catchAsyncError(async (req, res, next) => {
+  const posts = await getPosts();
   res.json(posts);
 });
 

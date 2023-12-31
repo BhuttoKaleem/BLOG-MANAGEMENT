@@ -7,9 +7,13 @@ const createUser = async (username, email, password) => {
   return await User.create({ username, email, password: hashedPassword });
 };
 
-// const getUserById = async (userId) => {
-//   return await User.findById(userId).select('-password'); // Exclude password field from the result
-// };
+const getUserById = async (userId) => {
+  return await User.findById(userId).select('-password'); // Exclude password field from the result
+};
+
+const getUsers = async()=>{
+  return await User.find();
+}
 
 const getUserByEmail = async (email) => {
   return await User.findOne({ email });
@@ -37,6 +41,7 @@ const loginUser = async (email, password) => {
 
 module.exports = {
   createUser,
+  getUsers,
   getUserById,
   getUserByEmail,
   comparePasswords,
