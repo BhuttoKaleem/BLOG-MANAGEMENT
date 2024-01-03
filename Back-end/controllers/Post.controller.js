@@ -3,7 +3,7 @@ const {
   getPosts,
   getPostById,
   updatePost,
-  deletePost,
+  deletePost,updatePostTitle
 } = require('../services/Post.service');
 const CustomError = require('../middleware/CustomError');
 const catchAsyncError = require('../middleware/catchAsyncError');
@@ -36,6 +36,16 @@ exports.updatePost = catchAsyncError(async (req, res, next) => {
     return next(new CustomError('Post not found', 404));
   }
   res.json(updatedPost);
+});
+
+exports.updatePostTitle = catchAsyncError(async(req,res,next)=>{
+const {postId} = req.params;
+const {title} = req.body;
+const UpdatePost = await updatePost(postId,title);
+if(!UpdatePost) {
+  return next(new CustomError('Post not found',404))
+}
+res.json(updatedPost);
 });
 
 exports.deletePost = catchAsyncError(async (req, res, next) => {

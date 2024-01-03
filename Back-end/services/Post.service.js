@@ -16,6 +16,10 @@ const updatePost = async (postId, title, content) => {
   return await PostModel.findByIdAndUpdate(postId, { title, content }, { new: true });
 };
 
+const updatePostTitle = async (postId, title)=>{
+  return await PostModel.findByIdAndUpdate(postId,{title},{new:true});
+}
+
 const deletePost = async (postId) => {
   return await PostModel.findByIdAndDelete(postId);
 };
@@ -26,4 +30,5 @@ module.exports = {
   getPostById,
   updatePost,
   deletePost,
+  updatePostTitle
 };
