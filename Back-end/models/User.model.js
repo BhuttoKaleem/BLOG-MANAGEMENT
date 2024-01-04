@@ -19,7 +19,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum:['user','admin'],
     default: 'user'
-  }
+  },
+  // profile:{
+  //   type: String, 
+  //   default: 
+  // }
   // Additional fields as per your requirements (e.g., profile info, etc.)
 });
 

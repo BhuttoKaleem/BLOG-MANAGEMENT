@@ -5,14 +5,6 @@ const catchAsyncError = (callback) => {
       );
     };
   };
-  
-  // const tryHandler=async(cb)=>{
-  //   try{
-  //   return  await cb();
-  //   }catch(error){
-  //     return error
-  //   }
-  // }
-  
+ 
   module.exports = catchAsyncError;
   
