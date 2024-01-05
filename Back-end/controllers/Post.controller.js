@@ -3,6 +3,7 @@ const {
   getPosts,
   getPostById,
   updatePost,
+  getPostByUser,
   deletePost,updatePostTitle
 } = require('../services/Post.service');
 const CustomError = require('../middleware/CustomError');
@@ -22,10 +23,26 @@ exports.getPostById = catchAsyncError(async (req, res, next) => {
   res.json(post);
 });
 
+exports.getPostByUser = catchAsyncError(async (req, res, next) => {
+  const userId = req.params.userId// Assuming user ID is passed in the request params
+  try {
+    const posts = await getPostByUser(userId);
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+    res.json(posts)
+});
+
+
+
 exports.createPost = catchAsyncError(async (req, res, next) => {
   const { title, content, author } = req.body;
   const post = await createPost(title, content, author);
-  res.status(201).json(post);
+  if(!post){
+    return (new CustomError('can not add post',404));
+  }
+  res.json(post)
 });
 
 exports.updatePost = catchAsyncError(async (req, res, next) => {
