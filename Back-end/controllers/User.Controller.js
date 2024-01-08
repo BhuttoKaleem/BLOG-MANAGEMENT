@@ -6,7 +6,7 @@ const {
     getUserByEmail,
     comparePasswords,
     signUp,
-    updateEmail,
+    updateUser,
     deleteUser
 } = require("../services/User.service");
 
@@ -39,14 +39,17 @@ exports.login = catchAsyncError(async(req, res, next) => {
     res.json(user);
 });
 
-exports.updateEmail = catchAsyncError(async(req, res, next) => {
-    const { userId, email } = req.body;
-    const updatedComment = await updateEmail(userId, email);
-    if (!updatedComment) {
-        return next(new CustomError('Post not found', 404));
+
+exports.updateUser = catchAsyncError(async (req, res, next) => {
+    const { userId } = req.params;
+    const { username, email } = req.body;
+    const updatedUser = await updateUser(userId, username, email ); 
+    if (!updatedUser) {
+      return next(new CustomError('User not found', 404));
     }
-    res.json(updatedComment);
-});
+    res.json(updatedUser);
+  });
+
 
 exports.deleteUser = catchAsyncError(async(req, res, next) => {
     const { userId } = req.body;
@@ -56,7 +59,6 @@ exports.deleteUser = catchAsyncError(async(req, res, next) => {
     }
     res.json({ "message": "user deleted Successfully", userDeleted });
 })
-
 
 
 //   exports.deleteUser = catchAsyncError(async (req, res, next) => {

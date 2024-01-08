@@ -3,7 +3,7 @@ const {
   getPosts,
   getPostById,
   updatePost,
-  getPostByUser,
+  getPostsByUser,
   deletePost,updatePostTitle
 } = require('../services/Post.service');
 const CustomError = require('../middleware/CustomError');
@@ -23,15 +23,14 @@ exports.getPostById = catchAsyncError(async (req, res, next) => {
   res.json(post);
 });
 
-exports.getPostByUser = catchAsyncError(async (req, res, next) => {
+exports.getPostsByUser = catchAsyncError(async (req, res, next) => {
   const userId = req.params.userId// Assuming user ID is passed in the request params
   try {
-    const posts = await getPostByUser(userId);
+    const posts = await getPostsByUser(userId);
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-    res.json(posts)
 });
 
 

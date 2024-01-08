@@ -10,9 +10,9 @@ const getPosts = async () => {
 
 
 
-const getPostByUser = async (userId) => {
+const getPostsByUser = async (userId) => {
   try {
-    const posts = await PostModel.find({ user: userId }).populate('user', 'username'); // Assuming 'user' field in Post model refers to the User collection
+    const posts = await PostModel.find({ author: userId }).populate('author','username email')// Assuming 'user' field in Post model refers to the User collection
     return posts;
   } catch (error) {
     throw new Error('Error fetching posts by user');
@@ -50,7 +50,7 @@ const deletePost = async (postId) => {
 module.exports = {
   createPost,
   getPosts,
-  getPostByUser,
+  getPostsByUser,
   getPostById,
   updatePost,
   deletePost,

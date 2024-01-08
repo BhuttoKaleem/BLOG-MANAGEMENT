@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "http://ocalhost:5000/user/updateUser/",
+            "request": "launch",
+            "url": "http://ocalhost:5000/user/updateUser/"
+        }
+    ]
+}

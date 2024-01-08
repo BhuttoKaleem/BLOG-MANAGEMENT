@@ -47,6 +47,11 @@ const deleteUser = async(userId)=>{
   return await UserModel.findByIdAndDelete(userId);
 }
 
+const updateUser = async (userId, username, email) => {
+  return await UserModel.findByIdAndUpdate(userId, { username, email }, { new: true });
+};
+
+
 module.exports = {
   signUp,
   getUsers,
@@ -55,5 +60,6 @@ module.exports = {
   comparePasswords,
   login,
   updateEmail,
+  updateUser,
   deleteUser
 };
