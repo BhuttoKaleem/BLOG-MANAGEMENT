@@ -1,33 +1,33 @@
 const CommentModel = require("../models/Comment.model");
+const PostModel =  require("../models/Post.model");
 
-exports.createComment = async (text, author) => {
-  try {
-    return await CommentModel.create({ text, author });
-  } catch (error) {
-    throw new Error('Failed to create comment');
-  }
-}
 
-exports.getComments = async () => {
-  try {
+const createComment = async (postId, text, author) => {
+  const commentCreated  = await CommentModel.create({  text, author });
+  await PostModel.findByIdAndUpdate(postId, { $push: { comments: commentCreated._id } });
+  return commentCreated
+};
+
+const getComments = async () => {
     return await CommentModel.find().populate('author');
-  } catch (error) {
-    throw new Error('Failed to get comments');
-  }
 }
-
-exports.deleteComment = async (commentId) => {
-  try {
-    return await CommentModel.findByIdAndDelete(commentId);
-  } catch (error) {
-    throw new Error('Failed to delete comment');
-  }
+const getPostComments = async (postId)=>{
+  const post = await PostModel.findById(postId).populate('comments');
+  return post.comments;
 }
+const getCommentById = async (commentId) => {
+    return await CommentModel.findById(commentId).populate('author');
+};
 
-exports.updateComment = async (commentId, text) => {
-  try {
+const deleteComment = async (commentId) => {
+    const deletedComment = await CommentModel.findByIdAndDelete(commentId);
+    await PostModel.updateOne({}, { $pull: { comments: commentId } });
+    return deletedComment;
+  }
+
+const updateComment = async (commentId, text) => {
     return await CommentModel.findByIdAndUpdate(commentId, { text }, { new: true });
-  } catch (error) {
-    throw new Error('Failed to update comment');
-  }
+}
+module.exports = {
+  createComment,getComments,getCommentById,deleteComment,updateComment,getPostComments
 }

@@ -1,48 +1,61 @@
-const CommentModel = require("../models/Comment.model");
-
+const {
+createComment, getCommentById,getComments,updateComment,deleteComment,getPostComments
+} = require("../services/Comment.service")
+const CustomError = require('../middleware/CustomError');
+const catchAsyncError = require('../middleware/catchAsyncError');
 // Create a new comment
-exports.createComment = async (req, res) => {
+exports.createComment = catchAsyncError(async (req, res, next) => {
+  const { postId } = req.params;
+  const { text, author } = req.body;
   try {
-    const comment = await CommentModel.create({
-      text: req.body.text,
-      author: req.body.author,
-    });
-    res.status(201).json(comment);
+    const comment = await createComment(postId, text, author);
+    res.json(comment);
   } catch (error) {
-    res.status(500).json({ message: "Failed to create comment" });
+    console.error('Error creating comment:', error);
+    next(new CustomError('Failed to create comment', 500));
   }
-};
+});
 
-// Get all comments
-exports.getComments = async (req, res) => {
-  try {
-    const comments = await CommentModel.find().populate("author");
-    res.json(comments);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to get comments" });
+exports.getPostComments = catchAsyncError(async(req,res,next)=>{
+  const {postId} = req.params;
+  const comments = await getPostComments(postId);
+  if(!comments){
+    return (new CustomError('no comments fetched',404));
   }
-};
+  res.json(comments)
+})
+exports.getCommentById = catchAsyncError(async (req, res, next) => {
+  const { commentId } = req.params;
+  const comment = await getCommentById(commentId);
+  if (!comment) {
+    return next(new CustomError('Post not found', 404));
+  }
+  res.json(comment);
+});
+// Get all comments
+exports.getComments = catchAsyncError(async (req, res, next) => {
+  const comments = await getComments();
+  res.json(comments);
+});
+
 
 // Delete a comment by ID
-exports.deleteComment = async (req, res) => {
-  try {
-    await CommentModel.findByIdAndDelete(req.params.id);
-    res.status(204).end();
-  } catch (error) {
-    res.status(500).json({ message: "Failed to delete comment" });
+exports.deleteComment = catchAsyncError(async (req, res, next) => {
+  const { commentId } = req.params;
+  const deletedComment = await deleteComment(commentId);
+  if (!deletedComment) {
+    return next(new CustomError('Comment not found', 404));
   }
-};
+  res.json({ message: 'Comment deleted successfully' });
+});
 
 // Update a comment by ID
-exports.updateComment = async (req, res) => {
-  try {
-    const updatedComment = await CommentModel.findByIdAndUpdate(
-      req.params.id,
-      { text: req.body.text },
-      { new: true }
-    );
-    res.json(updatedComment);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to update comment" });
+exports.updateComment = catchAsyncError(async(req,res,next)=>{
+  const {commentId} = req.params;
+  const {text} = req.body;
+  const UpdateComment = await updateComment(commentId,text);
+  if(!UpdateComment) {
+    return next(new CustomError('Comment not found',404))
   }
-};
+  res.json(updatedComment);
+  });
